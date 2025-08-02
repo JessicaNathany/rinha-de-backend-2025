@@ -1,0 +1,42 @@
+# Compile config
+bin/
+obj/
+appsettings.json
+
+# NuGet package restore
+**/packages/
+*.nupkg
+
+# Files temp
+**/*.bak
+**/*.log
+**/*.tmp
+**/*.vs
+
+# Fser files
+*.user
+*.suo
+*.userprefs
+/src/the-office.api/appsettings.json
+/src/the-office.api/appsettings.Development.json
+/src/the-office.api/appsettings.Development.json
+/src/the-office.api/appsettings.json
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/.idea.the-office.api.iml
+/modules.xml
+/projectSettingsUpdater.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+/src/cafedebug-backend.api/appsettings.Development.json
+/src/cafedebug-backend.api/appsettings.Development.json
+/src/cafedebug-backend.api/appsettings.json
+/src/cafedebug-backend.api/Properties/launchSettings.json
+/src/cafedebug-backend.api/Properties/launchSettings.json
