@@ -1,0 +1,35 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  rinha-api:
+    build:
+      context: "/Users/regis/Developer/dotnet-projects/rinha-de-backend-2025"
+      dockerfile: "src/rinha-de-backend-2025.api/Dockerfile"
+      target: "base"
+      args:
+        BUILD_CONFIGURATION: "Debug"
+    command: []
+    entrypoint:
+    - "/opt/JetBrains/RiderDebuggerTools/linux-arm64/JetBrains.Debugger.Worker"
+    - "--runtimeconfig"
+    - "/opt/JetBrains/RiderDebuggerTools/JetBrains.Debugger.Worker.runtimeconfig.json"
+    - "--mode=server"
+    - "--frontend-port=57000"
+    - "--backend-port=57200"
+    - "--roslyn-worker-port=57414"
+    - "--timeout=60"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      RIDER_DEBUGGER_LOG_DIR: "/var/opt/JetBrains/RiderDebuggerTools"
+      RESHARPER_LOG_CONF: "/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
+    image: "rinha-de-backend-2025.api:dev"
+    ports:
+    - "127.0.0.1:57014:57000"
+    - "127.0.0.1:57214:57200"
+    - "127.0.0.1:57414:57414"
+    volumes:
+    - "/Users/regis/Developer/dotnet-projects/rinha-de-backend-2025/src/rinha-de-backend-2025.api:/app:rw"
+    - "/Users/regis/Developer/dotnet-projects/rinha-de-backend-2025:/src:rw"
+    - "/Users/regis/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/regis/.local/share/JetBrains/RiderRemoteDebugger/2025.1.4/LinuxArm64:/opt/JetBrains/RiderDebuggerTools"
+    - "/Users/regis/Library/Logs/JetBrains/Rider2025.1/DebuggerWorker/JetBrains.Debugger.Worker.2025_8_06_20_31_36:/var/opt/JetBrains/RiderDebuggerTools:rw"
+    working_dir: "/app"
