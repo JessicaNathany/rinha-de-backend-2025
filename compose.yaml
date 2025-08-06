@@ -1,0 +1,7 @@
+﻿services:
+  rinha-de-backend-2025.api:
+    image: rinha-de-backend-2025.api
+    build:
+      context: .
+      dockerfile: src/rinha-de-backend-2025.api/Dockerfile
+
