@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  rinha-de-backend-2025.api:
+    build:
+      context: "/Users/regis/Developer/dotnet-projects/rinha-de-backend-2025"
+      dockerfile: "src/rinha-de-backend-2025.api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/rinha-de-backend-2025.api.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "rinha-de-backend-2025.api:dev"
+    ports: []
+    volumes:
+    - "/Users/regis/Developer/dotnet-projects/rinha-de-backend-2025/src/rinha-de-backend-2025.api:/app:rw"
+    - "/Users/regis/Developer/dotnet-projects/rinha-de-backend-2025:/src:rw"
+    - "/Users/regis/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"

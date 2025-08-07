@@ -1,0 +1,10 @@
+{
+  "name": "{name}",
+  "social": [
+    "https://www.linkedin.com/in/{name}"
+  ],
+  "source-code-repo": "https://github.com/{user}/{repository}",
+  "langs": ["c#"],
+  "storages": ["mysql"],
+  "load-balancers": ["nginx"]
+}

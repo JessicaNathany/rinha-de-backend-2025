@@ -1,0 +1,55 @@
+﻿services:
+  rinha-api:
+    image: rinha-de-backend-2025.api
+    build:
+      context: .
+      dockerfile: src/rinha-de-backend-2025.api/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Debug  # Use Debug for development
+    container_name: rinha_api_dev
+    hostname: rinha_api_dev
+    networks:
+      - backend_network
+      - payment-processor
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=rinha_database;Port=5432;Database=rinha_db;Username=mtagAPP;Password=Plarfgyrex
+      - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8080
+      - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8080
+    depends_on:
+      rinha_database:
+        condition: service_healthy 
+  
+  rinha_database:
+    image: postgres:17-alpine
+    container_name: rinha_database
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: "Plarfgyrex"
+      POSTGRES_USER: "mtagAPP"
+      POSTGRES_DB: rinha_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U mtagAPP -d rinha_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    networks:
+      - backend_network
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+      - rinha_database_data:/var/lib/postgresql/data
+
+volumes:
+  rinha_database_data:
+    external: false
+
+networks:
+  backend_network:
+    driver: bridge
+  payment-processor:
+    external: true
