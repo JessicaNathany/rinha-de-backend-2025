@@ -21,7 +21,7 @@
         condition: service_healthy 
   
   rinha_database:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     container_name: rinha_database
     restart: on-failure
     environment:
