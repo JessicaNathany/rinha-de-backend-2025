@@ -1,7 +1,3 @@
--- Creates the custom ENUM type for classifying the service used.
-CREATE TYPE service_type AS ENUM ('default', 'fallback');
-
-
 -- Creates the main 'payments' table.
 -- 'IF NOT EXISTS' prevents an error if the script is run multiple times.
 CREATE TABLE IF NOT EXISTS payments (
@@ -18,7 +14,7 @@ CREATE TABLE IF NOT EXISTS payments (
     requested_at TIMESTAMPTZ NOT NULL DEFAULT (now()),
 
     -- The type of service used, based on the ENUM defined above.
-    service_used service_type NOT NULL
+    service_used INTEGER NOT NULL -- 1=Default, 2=Fallback
 );
 
 -- Creates a unique index on 'correlation_id' to enforce business rule of no duplicate payments.
