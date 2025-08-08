@@ -1,6 +1,6 @@
 x-service-templates:
   backend-api-base: &backend-api-base
-    image: your-dockerhub-username/rinha-backend-2025:latest
+    image: jnathany/rinha-backend-2025:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=rinha_database;Port=5432;Database=rinha_db;Username=mtagAPP;Password=Plarfgyrex
@@ -74,6 +74,10 @@ services:
           cpus: "0.1"
           memory: "30MB"
 
+volumes:
+  rinha_database_data:
+    external: false
+    
 networks:
   backend_network:
     driver: bridge
