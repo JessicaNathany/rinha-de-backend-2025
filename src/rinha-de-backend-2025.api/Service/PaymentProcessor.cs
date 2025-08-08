@@ -1,4 +1,6 @@
-﻿using rinha_de_backend_2025.api.Request;
+﻿using rinha_de_backend_2025.api.Entity;
+using rinha_de_backend_2025.api.Infraestrutura;
+using rinha_de_backend_2025.api.Request;
 using rinha_de_backend_2025.api.Response;
 using System.Net;
 using System.Text;
@@ -8,9 +10,14 @@ namespace rinha_de_backend_2025.api.Service
 {
     public class PaymentProcessor : IPaymentProcessor
     {
+        private readonly IPaymentRepository _paymentRepository;
+        public PaymentProcessor(IPaymentRepository paymentRepository)
+        {
+            _paymentRepository = paymentRepository; 
+        }
         public async Task PaymentProcessorDefault(PaymentRequest request)
         {
-            var httpClient = new HttpClient(); 
+            var httpClient = new HttpClient();
             var url = Environment.GetEnvironmentVariable("PAYMENT_DEFAULT_URL");
 
             var body = new
@@ -19,15 +26,21 @@ namespace rinha_de_backend_2025.api.Service
                 amount = request.Amount,
                 requestedAt = DateTime.UtcNow.ToString("o")
             };
-            // TODO: teste ok, falta salvar no banco
 
             var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-
             var responseMessage = await httpClient.PostAsync(url, content);
+
+            var payments = new Payments
+            {
+                CorrelationId = Guid.Parse(request.CorrelationId),
+                Amount = request.Amount,   
+                RequestedAt = DateTime.UtcNow
+            };
 
             switch (responseMessage.StatusCode)
             {
-                case HttpStatusCode.Created:
+                case HttpStatusCode.OK:
+                    await _paymentRepository.Save(payments);
                     return;
                 case HttpStatusCode.BadRequest:
                     throw new BadHttpRequestException("Bad Request", (int)HttpStatusCode.BadRequest);

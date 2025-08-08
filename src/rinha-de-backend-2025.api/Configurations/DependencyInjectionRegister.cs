@@ -1,4 +1,6 @@
-﻿using rinha_de_backend_2025.api.Service;
+﻿using rinha_de_backend_2025.api.Infraestrutura;
+using rinha_de_backend_2025.api.Infraestrutura.Postgres;
+using rinha_de_backend_2025.api.Service;
 
 namespace rinha_de_backend_2025.api.Configurations
 {
@@ -7,6 +9,8 @@ namespace rinha_de_backend_2025.api.Configurations
         public static void ResolveDependencies(this IServiceCollection service)
         {
             service.AddScoped<IPaymentProcessor, PaymentProcessor>();
+            service.AddScoped<IPostgresConnection, PostgresConnection>();
+            service.AddScoped<IPaymentRepository, PaymentRepository>();
         }
     }
 }

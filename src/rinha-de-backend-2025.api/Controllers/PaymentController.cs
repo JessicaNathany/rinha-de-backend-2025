@@ -20,15 +20,15 @@ namespace rinha_de_backend_2025.api.Controllers
         {
             try
             {
-                //await _paymentProcessor.PaymentProcessorDefault(request);
-                // return Created();
+                await _paymentProcessor.PaymentProcessorDefault(request);
+                return Created();
 
-                return Ok(new
-                {
-                    correlationId = "4a7901b8-7d26-4d9d-aa19-4dc1c7cf60b5",
-                    amount = 59.90,
-                    requestedAt = "2025-07-15T12:34:56.000Z"
-                });
+                //return Ok(new
+                //{
+                //    correlationId = "4a7901b8-7d26-4d9d-aa19-4dc1c7cf60b5",
+                //    amount = 59.90,
+                //    requestedAt = "2025-07-15T12:34:56.000Z"
+                //});
             }
             catch (Exception)
             {
