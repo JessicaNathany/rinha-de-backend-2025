@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3A700D3-DF4C-4B6E-981A-39E9BC708218}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yaml = docker-compose.yaml
+		postgres-init\init-schema.sql = postgres-init\init-schema.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0A4D1B5-ECA8-4042-8791-B5C46C61C5AE}"
@@ -16,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external-services", "extern
 	ProjectSection(SolutionItems) = preProject
 		external-services\docker-compose-arm64.yml = external-services\docker-compose-arm64.yml
 		external-services\docker-compose.yml = external-services\docker-compose.yml
+		external-services\init.sql = external-services\init.sql
 	EndProjectSection
 EndProject
 Global
