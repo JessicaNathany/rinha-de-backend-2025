@@ -5,6 +5,6 @@
   ],
   "source-code-repo": "https://github.com/{user}/{repository}",
   "langs": ["c#"],
-  "storages": ["mysql"],
+  "storages": ["postgres"],
   "load-balancers": ["nginx"]
 }
