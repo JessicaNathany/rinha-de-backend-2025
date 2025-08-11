@@ -43,13 +43,13 @@ namespace rinha_de_backend_2025.api.Infraestrutura
                                 "values (@CorrelationId, @Amount, @RequestedAt, @ServiceType)";
 
                     await connection.ExecuteAsync(query, new
-                    {
+        {
                         entity.CorrelationId,
                         entity.Amount,
                         ServiceType = entity.ServiceType.ToString(),
                         entity.RequestedAt
                     });
-
+            
                     var result = await connection.QueryFirstAsync<Payments>(query);
                     return result;
                 }
