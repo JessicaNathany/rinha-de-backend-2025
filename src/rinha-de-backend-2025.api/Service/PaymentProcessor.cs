@@ -15,7 +15,7 @@ namespace rinha_de_backend_2025.api.Service
         {
             _paymentRepository = paymentRepository; 
         }
-        public async Task PaymentProcessorDefault(PaymentRequest request)
+        public async Task<Payments> PaymentProcessorDefault(PaymentRequest request)
         {
             var httpClient = new HttpClient();
             var url = Environment.GetEnvironmentVariable("PAYMENT_DEFAULT_URL");
@@ -34,14 +34,14 @@ namespace rinha_de_backend_2025.api.Service
             {
                 CorrelationId = Guid.Parse(request.CorrelationId),
                 Amount = request.Amount,   
+                ServiceType = ServiceType.Default,
                 RequestedAt = DateTime.UtcNow
             };
 
             switch (responseMessage.StatusCode)
             {
                 case HttpStatusCode.OK:
-                    await _paymentRepository.Save(payments);
-                    return;
+                    return await _paymentRepository.Save(payments);
                 case HttpStatusCode.BadRequest:
                     throw new BadHttpRequestException("Bad Request", (int)HttpStatusCode.BadRequest);
                 case HttpStatusCode.NotFound:
@@ -56,6 +56,11 @@ namespace rinha_de_backend_2025.api.Service
         public Task<FallbackResponse> PaymentProcessorFallback(PaymentRequest request)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Payments>> GetPaymentSummary()
+        {
+            return await _paymentRepository.Get();
         }
     }
 }

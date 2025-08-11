@@ -20,15 +20,8 @@ namespace rinha_de_backend_2025.api.Controllers
         {
             try
             {
-                await _paymentProcessor.PaymentProcessorDefault(request);
-                return Created();
-
-                //return Ok(new
-                //{
-                //    correlationId = "4a7901b8-7d26-4d9d-aa19-4dc1c7cf60b5",
-                //    amount = 59.90,
-                //    requestedAt = "2025-07-15T12:34:56.000Z"
-                //});
+                var result = await _paymentProcessor.PaymentProcessorDefault(request);
+                return Created("payment", result); 
             }
             catch (Exception)
             {
@@ -40,11 +33,15 @@ namespace rinha_de_backend_2025.api.Controllers
         [Route("payment-summary")]
         public async Task<IActionResult> PaymentSummary()
         {
-            return Ok(new
+            try
             {
-                @default = new { totalRequests = 10, totalAmount = 1000.00m },
-                fallback = new { totalRequests = 2, totalAmount = 200.00m }
-            });
+                var result = await _paymentProcessor.GetPaymentSummary();
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
