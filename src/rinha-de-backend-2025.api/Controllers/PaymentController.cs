@@ -21,7 +21,7 @@ namespace rinha_de_backend_2025.api.Controllers
             try
             {
                 var result = await _paymentProcessor.PaymentProcessorDefault(request);
-                return Created("payment", result); 
+                return Accepted(); 
             }
             catch (Exception)
             {
