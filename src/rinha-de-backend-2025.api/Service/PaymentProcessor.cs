@@ -17,7 +17,7 @@ namespace rinha_de_backend_2025.api.Service
         public async Task<Payments> PaymentProcessorDefault(PaymentRequest request)
         {
             var httpClient = new HttpClient();
-            var url = Environment.GetEnvironmentVariable("PAYMENT_DEFAULT_URL");
+            var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_DEFAULT");
 
             var body = new
             {
@@ -53,7 +53,7 @@ namespace rinha_de_backend_2025.api.Service
         public async Task<Payments> PaymentProcessorFallback(PaymentRequest request)
         {
              var httpClient = new HttpClient();
-            var url = Environment.GetEnvironmentVariable("PAYMENT_DEFAULT_URL");
+            var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_FALLBACK");
 
             var body = new
             {
