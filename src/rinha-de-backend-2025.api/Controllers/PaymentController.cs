@@ -1,34 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using rinha_de_backend_2025.api.Entity;
 using rinha_de_backend_2025.api.Mapper;
+using rinha_de_backend_2025.api.Infraestrutura.Queues;
 using rinha_de_backend_2025.api.Request;
 using rinha_de_backend_2025.api.Service;
 
 namespace rinha_de_backend_2025.api.Controllers
 {
     [ApiController]
-    public class PaymentController : ControllerBase
+    public class PaymentController(IPaymentMessageQueue paymentMessageQueue, IPaymentProcessor paymentProcessor) : ControllerBase
     {
-        private readonly IPaymentProcessor _paymentProcessor;
-
-        public PaymentController(IPaymentProcessor paymentProcessor)
-        {
-            _paymentProcessor = paymentProcessor;
-        }
-
         [HttpPost]
         [Route("payment")]
-        public async Task<IActionResult> Payment(PaymentRequest request)
+        public async Task<IActionResult> Payment(PaymentRequest request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var result = await _paymentProcessor.PaymentProcessorDefault(request);
-                return Accepted(); 
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await paymentMessageQueue.PublishAsync(request, cancellationToken);
+            return Accepted();
         }
 
         [HttpGet]

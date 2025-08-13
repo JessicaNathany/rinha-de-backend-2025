@@ -91,5 +91,10 @@ namespace rinha_de_backend_2025.api.Service
         {
             return await _paymentRepository.Get();
         }
+
+        public async Task<bool> PaymentProcessorDefaultIsHealthy()
+        {
+            return await Task.FromResult(true);
+        }
     }
 }

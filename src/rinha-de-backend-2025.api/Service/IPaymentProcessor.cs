@@ -9,5 +9,6 @@ namespace rinha_de_backend_2025.api.Service
         Task<Payments> PaymentProcessorDefault(PaymentRequest request);
         Task<Payments> PaymentProcessorFallback(PaymentRequest request);
         Task<List<Payments>> GetPaymentSummary();
+        Task<bool> PaymentProcessorDefaultIsHealthy();
     }
 }

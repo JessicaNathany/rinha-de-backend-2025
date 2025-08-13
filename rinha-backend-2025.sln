@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external-services", "extern
 	ProjectSection(SolutionItems) = preProject
 		external-services\docker-compose-arm64.yml = external-services\docker-compose-arm64.yml
 		external-services\docker-compose.yml = external-services\docker-compose.yml
-		external-services\init.sql = external-services\init.sql
 	EndProjectSection
 EndProject
 Global
