@@ -23,7 +23,7 @@ namespace rinha_de_backend_2025.api.Infraestrutura
                     var query = @"select
                                      count(1) as request,
                                      sum(amount) as amount,
-                                     service_used,
+                                     service_used
                                   from payments
                                   group by service_used";
 
