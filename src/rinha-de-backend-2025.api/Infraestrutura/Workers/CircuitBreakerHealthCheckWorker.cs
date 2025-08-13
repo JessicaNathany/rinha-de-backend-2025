@@ -27,8 +27,10 @@ internal sealed class CircuitBreakerHealthCheckWorker(
 
                     using var scope = scopeFactory.CreateScope();
                     var paymentProcessor = scope.ServiceProvider.GetRequiredService<IPaymentProcessor>();
+                    
+                    var health = await paymentProcessor.PaymentProcessorDefaultIsHealthy();
 
-                    if (await paymentProcessor.PaymentProcessorDefaultIsHealthy())
+                    if (health?.Failing == false)
                     {
                         logger.LogInformation("Health check successful. Manually resetting the circuit.");
                         resiliencePolicyProvider.BreakerPolicy.Reset();
