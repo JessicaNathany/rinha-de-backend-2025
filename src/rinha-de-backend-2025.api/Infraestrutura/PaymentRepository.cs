@@ -20,8 +20,12 @@ namespace rinha_de_backend_2025.api.Infraestrutura
             {
                 using (var connection = await _postgresConnection.OpenConnectionAsync())
                 {
-                    var query = "@select count(1) as request," +
-                                "sum(amount), as amount, service_used from payments group by service_used";
+                    var query = @"select
+                                     count(1) as request,
+                                     sum(amount) as amount,
+                                     service_used,
+                                  from payments
+                                  group by service_used";
 
                     var result = await connection.QueryAsync<Payments>(query);
                     return result.ToList();
@@ -39,18 +43,18 @@ namespace rinha_de_backend_2025.api.Infraestrutura
             {
                 using (var connection = await _postgresConnection.OpenConnectionAsync())
                 {
-                    var query = "@insert into payments (correlation_id, amount, requested_at, service_used)" +
-                                "values (@CorrelationId, @Amount, @RequestedAt, @ServiceType)";
+                    var query = @"insert into payments (correlation_id, amount, requested_at, service_used)
+                          values (@correlation_id, @amount, @requested_at, @service_used)
+                          returning *;";
 
-                    await connection.ExecuteAsync(query, new
-        {
-                        entity.CorrelationId,
-                        entity.Amount,
-                        ServiceType = entity.ServiceType.ToString(),
-                        entity.RequestedAt
+                    var result = await connection.QueryFirstAsync<Payments>(query, new
+                    {
+                        entity.correlation_id,
+                        entity.amount,
+                        service_used = (int)entity.service_used,
+                        entity.requested_at
                     });
-            
-                    var result = await connection.QueryFirstAsync<Payments>(query);
+
                     return result;
                 }
             }

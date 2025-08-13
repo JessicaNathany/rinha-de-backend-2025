@@ -4,6 +4,7 @@ using rinha_de_backend_2025.api.Request;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using static Dapper.SqlMapper;
 
 namespace rinha_de_backend_2025.api.Service
 {
@@ -31,10 +32,10 @@ namespace rinha_de_backend_2025.api.Service
 
             var payments = new Payments
             {
-                CorrelationId = Guid.Parse(request.CorrelationId),
-                Amount = request.Amount,   
-                ServiceType = ServiceType.Default,
-                RequestedAt = DateTime.UtcNow
+                correlation_id = Guid.Parse(request.CorrelationId),
+                amount = request.Amount,    
+                service_used = service_used.Default, 
+                requested_at = DateTime.UtcNow
             };
 
             switch (responseMessage.StatusCode)
@@ -67,10 +68,10 @@ namespace rinha_de_backend_2025.api.Service
 
             var payments = new Payments
             {
-                CorrelationId = Guid.Parse(request.CorrelationId),
-                Amount = request.Amount,   
-                ServiceType = ServiceType.Default,
-                RequestedAt = DateTime.UtcNow
+                correlation_id = Guid.Parse(request.CorrelationId),
+                amount = request.Amount,   
+                service_used = service_used.Default,
+                requested_at = DateTime.UtcNow
             };
 
             switch (responseMessage.StatusCode)

@@ -2,10 +2,10 @@
 {
     public class Payments
     {
-        public int Id { get; set; }
-        public Guid CorrelationId { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime RequestedAt { get; set; }
-        public ServiceType ServiceType { get; set; }
+        public int id { get; set; }
+        public Guid correlation_id { get; set; }
+        public decimal amount { get; set; }
+        public DateTime requested_at { get; set; }
+        public service_used service_used { get; set; }
     }
 }
