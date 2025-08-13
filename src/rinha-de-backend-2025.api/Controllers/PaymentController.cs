@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using rinha_de_backend_2025.api.Entity;
+using rinha_de_backend_2025.api.Mapper;
 using rinha_de_backend_2025.api.Request;
 using rinha_de_backend_2025.api.Service;
 
@@ -35,7 +37,9 @@ namespace rinha_de_backend_2025.api.Controllers
         {
             try
             {
-                var result = await _paymentProcessor.GetPaymentSummary();
+                var paymentSummary = await _paymentProcessor.GetPaymentSummary();
+                var result = PaymentMapper.ToResponse(paymentSummary);
+
                 return Ok(result);
             }
             catch (Exception)

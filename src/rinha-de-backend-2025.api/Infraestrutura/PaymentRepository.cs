@@ -28,6 +28,7 @@ namespace rinha_de_backend_2025.api.Infraestrutura
                                   group by service_used";
 
                     var result = await connection.QueryAsync<Payments>(query);
+                    
                     return result.ToList();
                 }
             }
