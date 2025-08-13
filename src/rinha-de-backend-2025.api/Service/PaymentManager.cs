@@ -12,7 +12,7 @@ public class PaymentManager(
 {
     private readonly AsyncPolicyWrap _resiliencePolicy = resiliencePolicyProvider.FallbackAndBreakerPolicy;
 
-    public async Task SubmitPayment(PaymentRequest request)
+    public async Task SubmitPayment(PaymentRequest request, CancellationToken cancellationToken)
     {
         var context = new Context
         {
@@ -20,9 +20,7 @@ public class PaymentManager(
             ["paymentProcessor"] = paymentProcessor
         };
 
-        await _resiliencePolicy.ExecuteAsync(async _ => await Execute(request),
-            context
-        );
+        await _resiliencePolicy.ExecuteAsync(async _ => await Execute(request), context);
     }
 
     private async Task Execute(PaymentRequest request)
