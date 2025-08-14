@@ -1,51 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using rinha_de_backend_2025.api.Entity;
 using rinha_de_backend_2025.api.Mapper;
+using rinha_de_backend_2025.api.Infraestrutura.Queues;
 using rinha_de_backend_2025.api.Request;
 using rinha_de_backend_2025.api.Service;
 
-namespace rinha_de_backend_2025.api.Controllers
+namespace rinha_de_backend_2025.api.Controllers;
+
+[ApiController]
+public class PaymentController(IPaymentMessageQueue paymentMessageQueue, IPaymentProcessor paymentProcessor, IPaymentManager paymentManager) : ControllerBase
 {
-    [ApiController]
-    public class PaymentController : ControllerBase
+    [HttpPost]
+    [Route("payment")]
+    public async Task<IActionResult> Payment(PaymentRequest request, CancellationToken cancellationToken)
     {
-        private readonly IPaymentProcessor _paymentProcessor;
+        await paymentMessageQueue.PublishAsync(request, cancellationToken);
+        return Accepted();
+    }
 
-        public PaymentController(IPaymentProcessor paymentProcessor)
-        {
-            _paymentProcessor = paymentProcessor;
-        }
+    [HttpGet]
+    [Route("payment-summary")]
+    public async Task<IActionResult> PaymentSummary()
+    {
+        var paymentSummary = await paymentProcessor.GetPaymentSummary();
+        var result = PaymentMapper.ToResponse(paymentSummary);
 
-        [HttpPost]
-        [Route("payment")]
-        public async Task<IActionResult> Payment(PaymentRequest request)
-        {
-            try
-            {
-                var result = await _paymentProcessor.PaymentProcessorDefault(request);
-                return Accepted(); 
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        [HttpGet]
-        [Route("payment-summary")]
-        public async Task<IActionResult> PaymentSummary()
-        {
-            try
-            {
-                var paymentSummary = await _paymentProcessor.GetPaymentSummary();
-                var result = PaymentMapper.ToResponse(paymentSummary);
-
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        return Ok(result);
+    }
+    
+    // For tests 
+    [HttpPost]
+    [Route("payment/sync")]
+    public async Task<IActionResult> PaymentSync(PaymentRequest request, CancellationToken cancellationToken)
+    {
+        await paymentManager.SubmitPayment(request, cancellationToken);
+        return Accepted();
     }
 }

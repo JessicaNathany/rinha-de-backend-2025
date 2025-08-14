@@ -4,92 +4,88 @@ using rinha_de_backend_2025.api.Request;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using static Dapper.SqlMapper;
 
-namespace rinha_de_backend_2025.api.Service
+namespace rinha_de_backend_2025.api.Service;
+
+public class PaymentProcessor(IPaymentRepository paymentRepository) : IPaymentProcessor
 {
-    public class PaymentProcessor : IPaymentProcessor
+    public async Task<Payments> PaymentProcessorDefault(PaymentRequest request)
     {
-        private readonly IPaymentRepository _paymentRepository;
-        public PaymentProcessor(IPaymentRepository paymentRepository)
+        var httpClient = new HttpClient();
+        var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_DEFAULT");
+
+        var body = new
         {
-            _paymentRepository = paymentRepository; 
-        }
-        public async Task<Payments> PaymentProcessorDefault(PaymentRequest request)
+            correlationId = request.CorrelationId,
+            amount = request.Amount,
+            requestedAt = DateTime.UtcNow.ToString("o")
+        };
+
+        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+        var responseMessage = await httpClient.PostAsync(url, content);
+
+        var payments = new Payments
         {
-            var httpClient = new HttpClient();
-            var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_DEFAULT");
+            correlation_id = Guid.Parse(request.CorrelationId),
+            amount = request.Amount,
+            service_used = service_used.Default,
+            requested_at = DateTime.UtcNow
+        };
 
-            var body = new
-            {
-                correlationId = request.CorrelationId,
-                amount = request.Amount,
-                requestedAt = DateTime.UtcNow.ToString("o")
-            };
-
-            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-            var responseMessage = await httpClient.PostAsync(url, content);
-
-            var payments = new Payments
-            {
-                correlation_id = Guid.Parse(request.CorrelationId),
-                amount = request.Amount,    
-                service_used = service_used.Default, 
-                requested_at = DateTime.UtcNow
-            };
-
-            switch (responseMessage.StatusCode)
-            {
-                case HttpStatusCode.OK:
-                    return await _paymentRepository.Save(payments);
-                case HttpStatusCode.BadRequest:
-                    throw new BadHttpRequestException("Bad Request", (int)HttpStatusCode.BadRequest);
-                case HttpStatusCode.InternalServerError:
-                    throw new BadHttpRequestException("Internal Server Error", (int)HttpStatusCode.InternalServerError);
-                default:
-                    throw new Exception("Unexpected error occurred while processing the payment request.");
-            }
-        }
-
-        public async Task<Payments> PaymentProcessorFallback(PaymentRequest request)
+        switch (responseMessage.StatusCode)
         {
-             var httpClient = new HttpClient();
-            var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_FALLBACK");
-
-            var body = new
-            {
-                correlationId = request.CorrelationId,
-                amount = request.Amount,
-                requestedAt = DateTime.UtcNow.ToString("o")
-            };
-
-            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-            var responseMessage = await httpClient.PostAsync(url, content);
-
-            var payments = new Payments
-            {
-                correlation_id = Guid.Parse(request.CorrelationId),
-                amount = request.Amount,   
-                service_used = service_used.Default,
-                requested_at = DateTime.UtcNow
-            };
-
-            switch (responseMessage.StatusCode)
-            {
-                case HttpStatusCode.OK:
-                    return await _paymentRepository.Save(payments);
-                case HttpStatusCode.BadRequest:
-                    throw new BadHttpRequestException("Bad Request", (int)HttpStatusCode.BadRequest);
-                case HttpStatusCode.InternalServerError:
-                    throw new BadHttpRequestException("Internal Server Error", (int)HttpStatusCode.InternalServerError);
-                default:
-                    throw new Exception("Unexpected error occurred while processing the payment request.");
-            }
+            case HttpStatusCode.OK:
+                return await paymentRepository.Save(payments);
+            case HttpStatusCode.BadRequest:
+                throw new BadHttpRequestException("Bad Request", (int)HttpStatusCode.BadRequest);
+            default:
+                throw new Exception("Unexpected error occurred while processing the payment request.");
         }
+    }
 
-        public async Task<List<Payments>> GetPaymentSummary()
+    public async Task<Payments> PaymentProcessorFallback(PaymentRequest request)
+    {
+        var httpClient = new HttpClient();
+        var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_FALLBACK");
+
+        var body = new
         {
-            return await _paymentRepository.Get();
+            correlationId = request.CorrelationId,
+            amount = request.Amount,
+            requestedAt = DateTime.UtcNow.ToString("o")
+        };
+
+        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+        var responseMessage = await httpClient.PostAsync(url, content);
+
+        var payments = new Payments
+        {
+            correlation_id = Guid.Parse(request.CorrelationId),
+            amount = request.Amount,
+            service_used = service_used.Default,
+            requested_at = DateTime.UtcNow
+        };
+
+        switch (responseMessage.StatusCode)
+        {
+            case HttpStatusCode.OK:
+                return await paymentRepository.Save(payments);
+            case HttpStatusCode.BadRequest:
+                throw new BadHttpRequestException("Bad Request", (int)HttpStatusCode.BadRequest);
+            default:
+                throw new Exception("Unexpected error occurred while processing the payment request.");
         }
+    }
+
+    public async Task<List<Payments>> GetPaymentSummary()
+    {
+        return await paymentRepository.Get();
+    }
+
+    public async Task<ServiceHealthStatus?> PaymentProcessorDefaultIsHealthy()
+    {
+        using var httpClient = new HttpClient();
+        var url = Environment.GetEnvironmentVariable("PAYMENT_PROCESSOR_DEFAULT") + "/service-health";
+        return await httpClient.GetFromJsonAsync<ServiceHealthStatus>(url);
     }
 }

@@ -1,4 +1,6 @@
+using System.Text.Json;
 using rinha_de_backend_2025.api.Configurations;
+using rinha_de_backend_2025.api.Infraestrutura.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ResolveDependencies();
 
+// Configure JSON options for performance
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
+
+// Add the background services
+builder.Services.AddHostedService<CircuitBreakerHealthCheckWorker>();
+builder.Services.AddHostedService<PaymentEventConsumer>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -18,10 +30,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
