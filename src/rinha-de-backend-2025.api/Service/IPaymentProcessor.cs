@@ -1,13 +1,11 @@
 ﻿using rinha_de_backend_2025.api.Entity;
 using rinha_de_backend_2025.api.Request;
 
-namespace rinha_de_backend_2025.api.Service
+namespace rinha_de_backend_2025.api.Service;
+
+public interface IPaymentProcessor
 {
-    public interface IPaymentProcessor
-    {
-        Task<Payments> PaymentProcessorDefault(PaymentRequest request);
-        Task<Payments> PaymentProcessorFallback(PaymentRequest request);
-        Task<List<Payments>> GetPaymentSummary();
-        Task<ServiceHealthStatus?> PaymentProcessorDefaultIsHealthy();
-    }
+    Task<Payments> PaymentProcessorDefault(PaymentRequest request);
+    Task<Payments> PaymentProcessorFallback(PaymentRequest request);
+    Task<List<Payments>> GetPaymentSummary();
 }
