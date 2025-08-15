@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using rinha_de_backend_2025.api.Entity;
 using rinha_de_backend_2025.api.Infraestrutura.Postgres;
+using rinha_de_backend_2025.api.Response;
 
 namespace rinha_de_backend_2025.api.Infraestrutura
 {
@@ -13,18 +14,18 @@ namespace rinha_de_backend_2025.api.Infraestrutura
             _postgresConnection = postgresConnection;
         }
 
-        public async Task<List<Payments>> GetPaymentSummary()
+        public async Task<List<PaymentSummary>> GetPaymentSummary()
         {
             using (var connection = await _postgresConnection.OpenConnectionAsync())
             {
                 var query = @"select
-                                     count(1) as request,
-                                     sum(amount) as amount,
-                                     service_used
+                                     count(1) as Request,
+                                     sum(amount) as Amount,
+                                     service_used as ServiceUsed
                                   from payments
                                   group by service_used";
 
-                var result = await connection.QueryAsync<Payments>(query);
+                var result = await connection.QueryAsync<PaymentSummary>(query);
                     
                 return result.ToList();
             }

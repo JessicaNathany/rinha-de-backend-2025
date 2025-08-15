@@ -1,5 +1,4 @@
 using rinha_de_backend_2025.api.Entity;
-using rinha_de_backend_2025.api.Infraestrutura.Clients;
 
 namespace rinha_de_backend_2025.api.Configurations;
 

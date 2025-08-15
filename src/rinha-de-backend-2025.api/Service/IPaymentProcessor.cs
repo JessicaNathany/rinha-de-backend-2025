@@ -7,5 +7,5 @@ public interface IPaymentProcessor
 {
     Task<Payments> PaymentProcessorDefault(PaymentRequest request);
     Task<Payments> PaymentProcessorFallback(PaymentRequest request);
-    Task<(List<Payments> paymentSummary, List<Payments> payments)> GetSummaryAndAll();
+    Task<List<PaymentSummary>> GetSummaryAndAll();
 }
