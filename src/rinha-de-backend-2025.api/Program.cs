@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ResolveDependencies();
+builder.Services.ConfigureHttpClient();
 
 // Configure JSON options for performance
 builder.Services.ConfigureHttpJsonOptions(options =>

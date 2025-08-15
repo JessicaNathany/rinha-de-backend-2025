@@ -1,6 +1,6 @@
 using Polly.CircuitBreaker;
 using rinha_de_backend_2025.api.Configurations;
-using rinha_de_backend_2025.api.Service;
+using rinha_de_backend_2025.api.Infraestrutura.Clients;
 
 namespace rinha_de_backend_2025.api.Infraestrutura.Workers;
 
@@ -26,9 +26,9 @@ internal sealed class CircuitBreakerHealthCheckWorker(
                     logger.LogInformation("Circuit is open. Performing health check on PaymentProcessorDefault.");
 
                     using var scope = scopeFactory.CreateScope();
-                    var paymentProcessor = scope.ServiceProvider.GetRequiredService<IPaymentProcessor>();
+                    var paymentGatewayClient = scope.ServiceProvider.GetRequiredService<IPaymentGatewayClient>();
                     
-                    var health = await paymentProcessor.PaymentProcessorDefaultIsHealthy();
+                    var health = await paymentGatewayClient.GetProcessPaymentDefaultHealthStatus();
 
                     if (health?.Failing == false)
                     {
