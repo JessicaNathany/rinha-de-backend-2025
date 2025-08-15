@@ -5,6 +5,7 @@ namespace rinha_de_backend_2025.api.Infraestrutura
     public interface IPaymentRepository
     {
         Task<Payments> Save(Payments entity);
-        Task<List<Payments>> Get();
+        Task<List<Payments>> GetPaymentSummary();
+        Task<List<Payments>> GetAll();
     }
 }

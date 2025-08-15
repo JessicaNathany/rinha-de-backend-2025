@@ -21,8 +21,9 @@ public class PaymentController(IPaymentMessageQueue paymentMessageQueue, IPaymen
     [Route("payment-summary")]
     public async Task<IActionResult> PaymentSummary()
     {
-        var paymentSummary = await paymentProcessor.GetPaymentSummary();
-        var result = PaymentMapper.ToResponse(paymentSummary);
+        var (paymentSummary,payments)  = await paymentProcessor.GetSummaryAndAll();
+        
+        var result = PaymentMapper.ToResponse(paymentSummary, payments);
 
         return Ok(result);
     }
