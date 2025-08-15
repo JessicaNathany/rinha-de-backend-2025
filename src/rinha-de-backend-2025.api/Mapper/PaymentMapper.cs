@@ -5,21 +5,29 @@ namespace rinha_de_backend_2025.api.Mapper
 {
     public class PaymentMapper
     {
-        public static PaymentsSummaryResponse ToResponse(List<Payments> payments)
+        public static PaymentsSummaryResponse ToResponse(List<Payments> paymentsSummary, List<Payments> payments)
         {
-            var @default = payments.FirstOrDefault(x => x.service_used == service_used.Default);
-            var fallback = payments.FirstOrDefault(x => x.service_used == service_used.Fallback);
+            var @default = paymentsSummary.FirstOrDefault(x => x.service_used == service_used.Default);
+            var fallback = paymentsSummary.FirstOrDefault(x => x.service_used == service_used.Fallback);
+
+            var totalRequestsDefault = payments
+                .ToList()
+                .Where(x=> x.service_used == service_used.Default).Count();
+
+            var totalRequestsFallback = payments
+                .ToList()
+                .Where(x => x.service_used == service_used.Fallback).Count();
 
             return new PaymentsSummaryResponse
             {
                 @default = new PaymentsSummaryItem
                 {
-                    totalRequests = @default != null ? (int)@default.id : 0, 
+                    totalRequests = totalRequestsDefault,
                     totalAmount = @default?.amount ?? 0
                 },
                 fallback = new PaymentsSummaryItem
                 {
-                    totalRequests = fallback != null ? (int)fallback.id : 0, 
+                    totalRequests = totalRequestsFallback,
                     totalAmount = fallback?.amount ?? 0
                 }
             };

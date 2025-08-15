@@ -13,7 +13,7 @@ namespace rinha_de_backend_2025.api.Infraestrutura
             _postgresConnection = postgresConnection;
         }
 
-        public async Task<List<Payments>> Get()
+        public async Task<List<Payments>> GetPaymentSummary()
         {
             using (var connection = await _postgresConnection.OpenConnectionAsync())
             {
@@ -26,6 +26,18 @@ namespace rinha_de_backend_2025.api.Infraestrutura
 
                 var result = await connection.QueryAsync<Payments>(query);
                     
+                return result.ToList();
+            }
+        }
+
+        public async Task<List<Payments>> GetAll()
+        {
+            using (var connection = await _postgresConnection.OpenConnectionAsync())
+            {
+                var query = @"select * from payments";
+
+                var result = await connection.QueryAsync<Payments>(query);
+
                 return result.ToList();
             }
         }
