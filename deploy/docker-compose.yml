@@ -4,8 +4,8 @@ x-service-templates:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - DB_CONNECTION_STRING=Host=backend_database;Port=5432;Database=rinha_db;Username=mtagAPP;Password=Plarfgyrex;MinPoolSize=15;MaxPoolSize=100
-      - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8001/payments
-      - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8002/payments
+      - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8080/payments
+      - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8080/payments
     networks:
       - backend_network
       - payment-processor
