@@ -3,9 +3,9 @@ x-service-templates:
     image: jnathany/rinha-backend-2025:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Host=rinha_database;Port=5432;Database=rinha_db;Username=mtagAPP;Password=Plarfgyrex
-      - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8080
-      - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8080
+      - DB_CONNECTION_STRING=Host=backend_database;Port=5432;Database=rinha_db;Username=mtagAPP;Password=Plarfgyrex;MinPoolSize=15;MaxPoolSize=100
+      - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8001/payments
+      - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8002/payments
     networks:
       - backend_network
       - payment-processor
@@ -48,7 +48,7 @@ services:
       - backend_network
     volumes:
       - ./postgres-init:/docker-entrypoint-initdb.d
-      - rinha_database_data:/var/lib/postgresql/data
+      - rinha_db_prd_data:/var/lib/postgresql/data
     deploy:
       resources:
         limits:
@@ -75,7 +75,7 @@ services:
           memory: "30MB"
 
 volumes:
-  rinha_database_data:
+  rinha_db_prd_data:
     external: false
     
 networks:

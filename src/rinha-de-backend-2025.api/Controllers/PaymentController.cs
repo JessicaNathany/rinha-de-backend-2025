@@ -18,8 +18,8 @@ public class PaymentController(IPaymentMessageQueue paymentMessageQueue, IPaymen
     }
 
     [HttpGet]
-    [Route("payment-summary")]
-    public async Task<IActionResult> PaymentSummary()
+    [Route("payments-summary")]
+    public async Task<IActionResult> PaymentSummary(DateTime?from, DateTime? to)
     {
         var paymentSummary  = await paymentProcessor.GetSummaryAndAll();
         
