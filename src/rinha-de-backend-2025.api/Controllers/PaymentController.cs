@@ -10,7 +10,7 @@ namespace rinha_de_backend_2025.api.Controllers;
 public class PaymentController(IPaymentMessageQueue paymentMessageQueue, IPaymentProcessor paymentProcessor, IPaymentManager paymentManager) : ControllerBase
 {
     [HttpPost]
-    [Route("payment")]
+    [Route("payments")]
     public async Task<IActionResult> Payment(PaymentRequest request, CancellationToken cancellationToken)
     {
         await paymentMessageQueue.PublishAsync(request, cancellationToken);
