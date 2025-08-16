@@ -21,11 +21,8 @@ public class PaymentProcessor(IPaymentGatewayClient paymentGatewayClient, IPayme
        return await paymentRepository.Save(payments);
     }
 
-    public async Task<List<PaymentSummary>> GetSummaryAndAll()
+    public async Task<List<PaymentSummary>> GetSummaryAndAll(DateTime? startDate, DateTime? endDate)
     {
-        var paymentSummary = await paymentRepository.GetPaymentSummary();
-        // var payments = await paymentRepository.GetAll();
-
-        return paymentSummary;
+        return await paymentRepository.GetPaymentSummary(startDate, endDate);
     }
 }

@@ -19,10 +19,12 @@ public class PaymentController(IPaymentMessageQueue paymentMessageQueue, IPaymen
 
     [HttpGet]
     [Route("payments-summary")]
-    public async Task<IActionResult> PaymentSummary(DateTime?from, DateTime? to)
+    public async Task<IActionResult> PaymentSummary([FromQuery]DateTime? to, [FromQuery] DateTime? from)
     {
-        var paymentSummary  = await paymentProcessor.GetSummaryAndAll();
-        
+        if (to.HasValue && from.HasValue && from > to)
+            return BadRequest("Start date cannot be greater than end date.");
+
+        var paymentSummary  = await paymentProcessor.GetSummaryAndAll(to, from);
         var result = PaymentMapper.ToResponse(paymentSummary);
 
         return Ok(result);
