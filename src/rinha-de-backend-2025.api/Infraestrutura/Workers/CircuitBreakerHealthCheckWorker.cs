@@ -79,7 +79,7 @@ internal sealed class CircuitBreakerHealthCheckWorker(
             
             await cacheRepository.SaveAsync(health);
 
-            if (health.IsHealthy)
+            if (health.IsHealthyAndMinResponseTimeIsOk())
             {
                 logger.LogInformation("Health check successful. Manually resetting the circuit.");
                 resiliencePolicyProvider.BreakerPolicy.Reset();
@@ -113,7 +113,7 @@ internal sealed class CircuitBreakerHealthCheckWorker(
                         var cacheAge = DateTime.UtcNow - cachedStatus.LastChecked;
                         if (cacheAge <= TimeSpan.FromSeconds(6))
                         {
-                            if (cachedStatus.IsHealthy)
+                            if (cachedStatus.IsHealthyAndMinResponseTimeIsOk())
                             {
                                 logger.LogInformation(
                                     "Cache indicates service is healthy (checked {Age:F1}s ago by {CheckedBy}). Resetting circuit",

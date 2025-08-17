@@ -7,4 +7,6 @@ public record HealthCheckStatus
     public decimal MinResponseTime { get; set; }
     public DateTime LastChecked { get; set; }
     public string CheckedBy { get; set; } = string.Empty;
+    
+    public bool IsHealthyAndMinResponseTimeIsOk() => IsHealthy && MinResponseTime < 700;
 }
