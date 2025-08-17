@@ -11,7 +11,7 @@ x-service-templates:
       resources:
         limits:
           cpus: "0.6"
-          memory: "110MB"
+          memory: "130MB"
 
 #####################################################################################
 services:
@@ -58,7 +58,7 @@ services:
       resources:
         limits:
           cpus: "0.2"
-          memory: "100MB"
+          memory: "60MB"
 
   load_balancer:
     image: nginx:alpine
