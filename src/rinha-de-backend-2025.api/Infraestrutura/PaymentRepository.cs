@@ -23,8 +23,8 @@ namespace rinha_de_backend_2025.api.Infraestrutura
                                      sum(amount) as Amount,
                                      service_used as ServiceUsed
                                   from payments
-                                  where (@startDate::timestamptz is null or requested_at >= @startDate)
-                                  and (@endDate::timestamptz is null or requested_at <= @endDate)
+                                  where requested_at >= @startDate
+                                  and requested_at <= @endDate
                                   group by service_used";
 
                 var result = await connection.QueryAsync<PaymentSummary>(query, new { startDate, endDate });
