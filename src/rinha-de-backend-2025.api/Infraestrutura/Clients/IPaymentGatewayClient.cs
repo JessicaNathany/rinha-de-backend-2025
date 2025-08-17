@@ -7,5 +7,5 @@ public interface IPaymentGatewayClient
 {
     Task<Payments> ProcessPaymentDefault(PaymentRequest request);
     Task<Payments> ProcessPaymentFallback(PaymentRequest request);
-    Task<ServiceHealthStatus?> GetProcessPaymentDefaultHealthStatus();
+    Task<HealthCheckStatus?> GetProcessPaymentDefaultHealthStatus(string serviceName, string checkedBy);
 }

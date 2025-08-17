@@ -1,7 +1,6 @@
 ﻿using rinha_de_backend_2025.api.Entity;
-using rinha_de_backend_2025.api.Response;
 
-namespace rinha_de_backend_2025.api.Infraestrutura
+namespace rinha_de_backend_2025.api.Infraestrutura.Repositories
 {
     public interface IPaymentRepository
     {

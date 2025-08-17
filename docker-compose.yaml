@@ -19,6 +19,7 @@
       - ConnectionStrings__DefaultConnection=Host=rinha_database;Port=5432;Database=rinha_db;Username=mtagAPP;Password=Plarfgyrex
       - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8080
       - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8080
+      - INSTANCE_NAME=backend-api-1
     depends_on:
       rinha_database:
         condition: service_healthy 

@@ -2,6 +2,7 @@
 using rinha_de_backend_2025.api.Infraestrutura;
 using rinha_de_backend_2025.api.Request;
 using rinha_de_backend_2025.api.Infraestrutura.Clients;
+using rinha_de_backend_2025.api.Infraestrutura.Repositories;
 
 namespace rinha_de_backend_2025.api.Service;
 
