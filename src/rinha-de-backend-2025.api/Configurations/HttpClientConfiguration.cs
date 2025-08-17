@@ -15,7 +15,7 @@ public static class HttpClientConfiguration
             }
             
             client.BaseAddress = new Uri(baseUrl);
-            client.Timeout = TimeSpan.FromSeconds(2);
+            client.Timeout = TimeSpan.FromMilliseconds(800);
         });
 
         service.AddHttpClient(nameof(service_used.Fallback), client =>
@@ -27,7 +27,7 @@ public static class HttpClientConfiguration
             }
 
             client.BaseAddress = new Uri(baseUrl);
-            client.Timeout = TimeSpan.FromSeconds(5);
+            client.Timeout = TimeSpan.FromMilliseconds(5000);
         });
     }
 }

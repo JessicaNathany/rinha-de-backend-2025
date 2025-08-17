@@ -17,11 +17,23 @@ public class PaymentGatewayClient(IHttpClientFactory httpClientFactory, ILogger<
         return await ProcessPayment(request, service_used.Fallback);
     }
     
-    public async Task<ServiceHealthStatus?> GetProcessPaymentDefaultHealthStatus()
+    public async Task<HealthCheckStatus?> GetProcessPaymentDefaultHealthStatus(string serviceName, string checkedBy)
     {
         var client = httpClientFactory.CreateClient(nameof(service_used.Default));
         
-        return await client.GetFromJsonAsync<ServiceHealthStatus>("/payments/service-health");
+        var response = await client.GetFromJsonAsync<HealthCheckResponse>("/payments/service-health");
+        
+        if (response == null)
+            return null;
+
+        return new HealthCheckStatus
+        {
+            ServiceName = serviceName,
+            IsHealthy = !response.Failing,
+            MinResponseTime = response.MinResponseTime,
+            LastChecked = DateTime.UtcNow,
+            CheckedBy = checkedBy
+        };
     }
     
     private async Task<Payments> ProcessPayment(PaymentRequest request, service_used serviceType)

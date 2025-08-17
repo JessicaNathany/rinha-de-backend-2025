@@ -24,10 +24,14 @@ services:
   backend-api-1:
     <<: *backend-api-base
     container_name: backend-api-1
+    environment:
+      - INSTANCE_NAME=backend-api-1
 
   backend-api-2:
     <<: *backend-api-base
     container_name: backend-api-2
+    environment:
+      - INSTANCE_NAME=backend-api-2
 
   backend_database:
     image: postgres:17-alpine
@@ -48,7 +52,6 @@ services:
       - backend_network
     volumes:
       - ./postgres-init:/docker-entrypoint-initdb.d
-      - rinha_db_prd_data:/var/lib/postgresql/data
     deploy:
       resources:
         limits:
@@ -73,10 +76,6 @@ services:
         limits:
           cpus: "0.1"
           memory: "30MB"
-
-volumes:
-  rinha_db_prd_data:
-    external: false
     
 networks:
   backend_network:

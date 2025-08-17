@@ -1,9 +1,8 @@
 ﻿using Dapper;
 using rinha_de_backend_2025.api.Entity;
 using rinha_de_backend_2025.api.Infraestrutura.Postgres;
-using rinha_de_backend_2025.api.Response;
 
-namespace rinha_de_backend_2025.api.Infraestrutura
+namespace rinha_de_backend_2025.api.Infraestrutura.Repositories
 {
     public class PaymentRepository : IPaymentRepository
     {
@@ -18,15 +17,31 @@ namespace rinha_de_backend_2025.api.Infraestrutura
         {
             using (var connection = await _postgresConnection.OpenConnectionAsync())
             {
-                var query = @"select
-                                     count(1) as Request,
-                                     sum(amount) as Amount,
-                                     service_used as ServiceUsed
-                                  from payments
-                                  where requested_at >= @startDate
-                                  and requested_at <= @endDate
-                                  group by service_used";
+                var conditions = new List<string>();
+                var parameters = new DynamicParameters();
 
+                if (startDate.HasValue)
+                {
+                    conditions.Add("requested_at >= @startDate");
+                    parameters.Add("startDate", startDate.Value);
+                }
+
+                if (endDate.HasValue)
+                {
+                    conditions.Add("requested_at <= @endDate");
+                    parameters.Add("endDate", endDate.Value);
+                }
+                
+                var whereClause = conditions.Any() ? "WHERE " + string.Join(" AND ", conditions) : "";
+
+                var query = $@"SELECT
+                          count(1) as Request,
+                          sum(amount) as Amount,
+                          service_used as ServiceUsed
+                       FROM payments
+                       {whereClause}
+                       GROUP BY service_used";
+                
                 var result = await connection.QueryAsync<PaymentSummary>(query, new { startDate, endDate });
                     
                 return result.ToList();
