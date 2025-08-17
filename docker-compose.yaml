@@ -43,11 +43,6 @@
       - backend_network
     volumes:
       - ./postgres-init:/docker-entrypoint-initdb.d
-      - rinha_database_data:/var/lib/postgresql/data
-
-volumes:
-  rinha_database_data:
-    external: false
 
 networks:
   backend_network:
