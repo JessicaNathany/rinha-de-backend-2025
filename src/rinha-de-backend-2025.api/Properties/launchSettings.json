@@ -19,7 +19,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "PAYMENT_PROCESSOR_DEFAULT": "http://localhost:8001/payments",
         "PAYMENT_PROCESSOR_FALLBACK": "http://localhost:8002/payments",
-        "DB_CONNECTION_STRING": "Host=localhost;Port=5432;Database=rinha_db;Username =mtagAPP;Password=Plarfgyrex;MinPoolSize=15;MaxPoolSize=20;ConnectionPruningInterval=3"
+        "DB_CONNECTION_STRING": "Host=localhost;Port=5432;Database=rinha_db;Username =mtagAPP;Password=Plarfgyrex;MinPoolSize=15;MaxPoolSize=20;ConnectionPruningInterval=3",
+        "INSTANCE_NAME": "backend-api-1"
       }
     },  
     "https": {
