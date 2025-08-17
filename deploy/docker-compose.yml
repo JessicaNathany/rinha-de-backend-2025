@@ -24,6 +24,10 @@ services:
       - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8080/payments
       - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8080/payments
       - INSTANCE_NAME=backend-api-1
+      - Logging__LogLevel__Default=Error
+      - Logging__LogLevel__Microsoft=Error
+      - Logging__LogLevel__Microsoft.AspNetCore=Error
+      - Logging__LogLevel__System=Error
 
   backend-api-2:
     <<: *backend-api-base
@@ -34,6 +38,10 @@ services:
       - PAYMENT_PROCESSOR_DEFAULT=http://payment-processor-default:8080/payments
       - PAYMENT_PROCESSOR_FALLBACK=http://payment-processor-fallback:8080/payments
       - INSTANCE_NAME=backend-api-2
+      - Logging__LogLevel__Default=Error
+      - Logging__LogLevel__Microsoft=Error
+      - Logging__LogLevel__Microsoft.AspNetCore=Error
+      - Logging__LogLevel__System=Error
 
   backend_database:
     image: postgres:17-alpine
