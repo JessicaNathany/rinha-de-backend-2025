@@ -1,6 +1,6 @@
 -- Creates the main 'payments' table.
 -- 'IF NOT EXISTS' prevents an error if the script is run multiple times.
-CREATE TABLE IF NOT EXISTS payments
+CREATE UNLOGGED TABLE IF NOT EXISTS payments
 (
     -- BIGSERIAL is an 8-byte integer, safer for high-volume systems than a standard 4-byte SERIAL.
     id             BIGSERIAL PRIMARY KEY,
